@@ -8,7 +8,7 @@ export type State = 'start' | 'run' | 'finish'
 const NUMBER_OF_WORDS = 12
 const COUNTDOWN_SECONDS = 30
 
-export function useEngine (): { errors: number, state: string, words: string, timeLeft: number, typed: string, totalTyped: number, restart: () => void } {
+export function useEngine (): { errors: number, state: State, words: string, timeLeft: number, typed: string, totalTyped: number, restart: () => void } {
   const [state, setState] = useState<State>('start')
   const { words, UpdateWords } = useWords(NUMBER_OF_WORDS)
   const { timeLeft, resetCountdown, startCountdown } = useCountdown(COUNTDOWN_SECONDS)
