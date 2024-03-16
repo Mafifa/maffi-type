@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useState, useRef, useEffect } from 'react'
 
-export const useCountdown = (seconds: number) => {
+const useCountdown = (seconds: number) => {
   const [timeLeft, setTimeLeft] = useState(seconds)
   const intervalRef = useRef<NodeJS.Timer>(null)
   const hasTimerEnded = timeLeft <= 0
@@ -15,7 +15,7 @@ export const useCountdown = (seconds: number) => {
   }, [setTimeLeft, hasTimerEnded, isRunning])
 
   const resetCountdown = useCallback(() => {
-    clearInterval(intervalRef.current)
+    clearInterval(intervalRef.current!)
     intervalRef.current = null
     setTimeLeft(seconds)
   }, [seconds])
@@ -23,15 +23,17 @@ export const useCountdown = (seconds: number) => {
   // when the countdown reaches 0, clear the countdown interval
   useEffect(() => {
     if (hasTimerEnded) {
-      clearInterval(intervalRef.current)
+      clearInterval(intervalRef.current!)
       intervalRef.current = null
     }
   }, [hasTimerEnded])
 
   // clear interval when component unmounts
   useEffect(() => {
-    return () => { clearInterval(intervalRef.current) }
+    return () => { clearInterval(intervalRef.current!) }
   }, [])
 
   return { timeLeft, startCountdown, resetCountdown }
 }
+
+export default useCountdown
