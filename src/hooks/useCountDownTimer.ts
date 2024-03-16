@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 export const useCountdown = (seconds: number) => {
   const [timeLeft, setTimeLeft] = useState(seconds)
-  const intervalRef = useRef<NodeJS.Timer | null>(null)
+  const intervalRef = useRef<NodeJS.Timer>(null)
   const hasTimerEnded = timeLeft <= 0
   const isRunning = intervalRef.current != null
 
