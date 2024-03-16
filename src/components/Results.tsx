@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import { formatPercentage } from '../utils/Helpers'
-import { State } from '../hooks/useEngine'
 
 export function Results ({
   state,
@@ -9,7 +8,7 @@ export function Results ({
   total,
   className
 }: {
-  state: State
+  state: string
   errors: number
   accuracyPercentage: number
   total: number
