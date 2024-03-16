@@ -39,7 +39,7 @@ function App (): JSX.Element {
       <Results
         state={state}
         className='mt-10'
-        errors={10}
+        errors={errors}
         accuracyPercentage={calculateAccuracyPercentage(errors, totalTyped)}
         total={totalTyped}
       />
