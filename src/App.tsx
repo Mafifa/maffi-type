@@ -1,9 +1,9 @@
-import { faker } from '@faker-js/faker'
 import { RestartButotn } from './components/RestartButton'
 import { Results } from './components/Results'
 import { UserTypings } from './components/UserTyping'
 import React from 'react'
 import { useEngine } from './hooks/useEngine'
+import { calculateAccuracyPercentage } from './utils/Helpers'
 
 function GeneratedWords ({ words }: { words: string }): JSX.Element {
   return (
@@ -24,20 +24,24 @@ function WordsContainer ({ children }: { children: React.ReactNode }): JSX.Eleme
 }
 
 function App (): JSX.Element {
-  const { state, words, timeLeft, typed } = useEngine()
+  const { state, words, timeLeft, typed, restart, totalTyped, errors } = useEngine()
   return (
     <div>
       <CountdownTimer timeLeft={timeLeft} />
       <WordsContainer>
         <GeneratedWords words={words} />
-        <UserTypings className='absolute inset-0' words={words} userInput={typed} />
+        <UserTypings
+          className='absolute inset-0'
+          words={words}
+          userInput={typed} />
       </WordsContainer>
-      <RestartButotn onRestart={() => null} className={'mx-auto mt-10 text-slate-500'} ></RestartButotn>
+      <RestartButotn onRestart={restart} className={'mx-auto mt-10 text-slate-500'} ></RestartButotn>
       <Results
+        state={state}
         className='mt-10'
         errors={10}
-        accuracyPercentage={120}
-        total={200}
+        accuracyPercentage={calculateAccuracyPercentage(errors, totalTyped)}
+        total={totalTyped}
       />
     </div>
   )
