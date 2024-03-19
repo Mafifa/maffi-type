@@ -1,38 +1,36 @@
 import { useCallback, useState, useRef, useEffect } from 'react'
 
-function useCountdown (seconds: number) {
-  const [timeLeft, setTimeLeft] = useState(seconds)
+function useCountdown (initialSeconds: number) {
+  const [timeLeft, setTimeLeft] = useState(initialSeconds)
   const intervalRef = useRef<number | null>(null)
-  const hasTimerEnded = timeLeft <= 0
-  const isRunning = intervalRef.current != null
+  const isRunning = intervalRef.current !== null
 
   const startCountdown = useCallback(() => {
-    if (!hasTimerEnded && !isRunning) {
+    if (!isRunning && timeLeft > 0) {
       intervalRef.current = window.setInterval(() => {
-        setTimeLeft((prevTimeLeft) => prevTimeLeft - 1)
+        setTimeLeft((prevTimeLeft) => {
+          const newTimeLeft = prevTimeLeft - 1
+          if (newTimeLeft <= 0) {
+            window.clearInterval(intervalRef.current!)
+            intervalRef.current = null
+            return 0
+          } else {
+            return newTimeLeft
+          }
+        })
       }, 1000)
     }
-  }, [setTimeLeft, hasTimerEnded, isRunning])
+  }, [isRunning, timeLeft])
 
-  const resetCountdown = useCallback(() => {
+  const resetCountdown = useCallback((seconds: number = initialSeconds) => {
     if (intervalRef.current !== null) {
       window.clearInterval(intervalRef.current)
       intervalRef.current = null
-      setTimeLeft(seconds)
     }
-  }, [seconds])
+    setTimeLeft(seconds)
+  }, [initialSeconds])
 
-  // when the countdown reaches 0, clear the countdown interval
-  useEffect(() => {
-    if (hasTimerEnded) {
-      if (intervalRef.current !== null) {
-        window.clearInterval(intervalRef.current)
-        intervalRef.current = null
-      }
-    }
-  }, [hasTimerEnded])
-
-  // clear interval when component unmounts
+  // Clear interval when component unmounts
   useEffect(() => {
     return () => {
       if (intervalRef.current !== null) {
