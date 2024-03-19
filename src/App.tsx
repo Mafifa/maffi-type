@@ -7,7 +7,7 @@ import { calculateAccuracyPercentage } from './utils/Helpers'
 
 function GeneratedWords ({ words }: { words: string }): JSX.Element {
   return (
-    <div className='text-slate-500'>{words}</div>
+    <div className='text-[#5f6569]'>{words}</div>
   )
 }
 
